@@ -177,7 +177,10 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
             return None
         }
 
+        // If the number of values in the max heap and min heap are equal, two candidates are found.
+        // If not then the median is the root of the larger heap.
         if self.max_heap.len() == self.min_heap.len() {
+            // Merge the two candidates to get the median.
             let median = self.median_kind.merge(self.max_heap.peek().unwrap(), &self.min_heap.peek().unwrap().0);
             return Some(median)
         } else if self.max_heap.len() > self.min_heap.len() {
@@ -205,18 +208,25 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
     /// assert_eq!(1, heap.get_median().unwrap());
     /// ```
     pub fn push(&mut self, value: T) {
+        // If the heap is empty, push the value to the max heap.
         if self.max_heap.len() == 0 && self.min_heap.len() == 0 {
             self.max_heap.push(value);
             return
         }
 
+        // Get the median of the values in the heap.
         let median = self.get_median().unwrap();
+        // If the value is less than the median, push it to the max heap.
+        // If the value is greater than the median, push it to the min heap.
         if value < median {
             self.max_heap.push(value);
         } else {
             self.min_heap.push(Reverse(value));
         }
 
+        // Balance the heaps.
+        // If the difference between the number of values in the max heap and min heap is greater than 1, pop the root of the larger heap and push it to the smaller heap.
+        // This ensures that the difference between the number of values in the max heap and min heap is at most 1.
         if self.max_heap.len() > self.min_heap.len() + 1 {
             let value = self.max_heap.pop().unwrap();
             self.min_heap.push(Reverse(value));
