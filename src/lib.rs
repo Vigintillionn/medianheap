@@ -10,6 +10,8 @@ use num::traits::One;
 /// Example:
 /// 
 /// ```
+/// use medianheap::MergeMedian;
+/// 
 /// struct MyMedian;
 /// impl MergeMedian<i32> for MyMedian {
 ///    fn merge(&self, a: &i32, b: &i32) -> i32 {
@@ -29,13 +31,26 @@ use num::traits::One;
 /// This allows the MedianHeap struct to use the MyMedian struct to calculate the median of the values in the heap when 2 median candidates are found.
 /// 
 /// ```
+/// use medianheap::{MergeMedian, MedianHeap};
+/// 
+/// struct MyMedian;
+/// impl MergeMedian<i32> for MyMedian {
+///    fn merge(&self, a: &i32, b: &i32) -> i32 {
+///         if a > b {
+///             *a
+///         } else {
+///             *b
+///         }
+///     }
+/// }
+/// 
 /// let mut heap = MedianHeap::new(MyMedian);
 /// heap.push(1);
 /// heap.push(2);
 /// heap.push(3);
 /// heap.push(4);
 /// 
-/// assert_eq!(3, heap.get_median()); // Two median candidates are 2 and 3. MyMedian.merge(2, 3) returns 3.
+/// assert_eq!(3, heap.get_median().unwrap()); // Two median candidates are 2 and 3. MyMedian.merge(2, 3) returns 3.
 /// ```
 pub trait MergeMedian<T> {
     fn merge(&self, a: &T, b: &T) -> T;
@@ -46,6 +61,8 @@ pub trait MergeMedian<T> {
 /// 
 /// Example:
 /// ```
+/// use medianheap::{LeftHandedMedian, MergeMedian};
+/// 
 /// let left_handed_median = LeftHandedMedian;
 /// let a = 1;
 /// let b = 2;
@@ -63,15 +80,17 @@ impl<T: Ord + Add + Copy> MergeMedian<T> for LeftHandedMedian {
     }
 }
 
-/// RightHandedMedian is a struct that implements the MergeMedian trait.
+/// MidpointMedian is a struct that implements the MergeMedian trait.
 /// It calculates the median by taking the average of the two values.
 /// 
 /// Example:
 /// ```
-/// let right_handed_median = RightHandedMedian;
+/// use medianheap::{MidpointMedian, MergeMedian};
+/// 
+/// let midpoint_median = MidpointMedian;
 /// let a = 2;
 /// let b = 4;
-/// let median = right_handed_median.merge(&a, &b);
+/// let median = midpoint_median.merge(&a, &b);
 /// assert_eq!(median, 3);
 /// ```
 pub struct MidpointMedian;
@@ -91,6 +110,8 @@ impl<T: Div<Output = T> + Add<T, Output = T> + From<i32> + Copy + One> MergeMedi
 /// 
 /// Example:
 /// ```
+/// use medianheap::{MidpointMedian, MedianHeap};
+/// 
 /// let mut heap = MedianHeap::new(MidpointMedian);
 /// heap.push(2);
 /// heap.push(4);
@@ -111,6 +132,8 @@ impl<T: Ord, K: MergeMedian<T>> MedianHeap<T, K> {
     /// 
     /// Example:
     /// ```
+    /// use medianheap::{MidpointMedian, MedianHeap};
+    /// 
     /// let mut heap = MedianHeap::new(MidpointMedian);
     /// heap.push(1);
     /// heap.push(2);
@@ -134,6 +157,8 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
     /// 
     /// Example:
     /// ```
+    /// use medianheap::{MedianHeap, LeftHandedMedian};
+    /// 
     /// let mut heap = MedianHeap::new(LeftHandedMedian);
     /// heap.push(1);
     /// heap.push(2);
@@ -168,6 +193,8 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
     /// 
     /// Example:
     /// ```
+    /// use medianheap::{MedianHeap, LeftHandedMedian};
+    /// 
     /// let mut heap = MedianHeap::new(LeftHandedMedian);
     /// heap.push(2);
     /// 
@@ -205,6 +232,8 @@ impl<T, K> MedianHeap<T, K> {
     /// 
     /// Example:
     /// ```
+    /// use medianheap::{MedianHeap, LeftHandedMedian};
+    /// 
     /// let mut heap = MedianHeap::new(LeftHandedMedian);
     /// heap.push(1);
     /// heap.push(2);
@@ -222,6 +251,8 @@ impl<T, K> MedianHeap<T, K> {
     /// 
     /// Example:
     /// ```
+    /// use medianheap::{MedianHeap, LeftHandedMedian};
+    /// 
     /// let mut heap = MedianHeap::new(LeftHandedMedian);
     /// 
     /// assert_eq!(true, heap.is_empty());
@@ -238,6 +269,8 @@ impl<T, K> MedianHeap<T, K> {
     /// 
     /// Example:
     /// ```
+    /// use medianheap::{MedianHeap, LeftHandedMedian};
+    /// 
     /// let mut heap = MedianHeap::new(LeftHandedMedian);
     /// heap.push(1);
     /// heap.push(2);
@@ -296,7 +329,7 @@ mod tests {
         heap.push(9);
         heap.push(0);
 
-        assert_eq!(5, heap.len());
+        assert_eq!(9, heap.len());
         assert_eq!(4, heap.get_median().unwrap());
     }
 
@@ -313,7 +346,7 @@ mod tests {
         heap.push(9);
         heap.push(0);
 
-        assert_eq!(5, heap.len());
+        assert_eq!(9, heap.len());
         heap.clear();
         assert_eq!(0, heap.len());
     }
@@ -333,7 +366,7 @@ mod tests {
         heap.push(2);
         heap.push(3);
         heap.push(4);
-        assert_eq!(3, heap.get_median().unwrap());
+        assert_eq!(2, heap.get_median().unwrap());
     }
 
     #[test]
@@ -344,12 +377,13 @@ mod tests {
         heap.push(3);
         heap.push(4);
 
-        assert_eq!(3, heap.get_median().unwrap());
+        assert_eq!(2, heap.get_median().unwrap());
 
         heap.push(5);
         assert_eq!(3, heap.get_median().unwrap());
 
         heap.push(6);
+        heap.push(7);
         assert_eq!(4, heap.get_median().unwrap());
     }
 }
