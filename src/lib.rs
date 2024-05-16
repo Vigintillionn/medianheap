@@ -82,6 +82,12 @@ impl<T: Ord + Add + Copy> MergeMedian<T> for LeftHandedMedian {
     }
 }
 
+impl Default for LeftHandedMedian {
+    fn default() -> Self {
+        LeftHandedMedian
+    }
+}
+
 /// MidpointMedian is a struct that implements the MergeMedian trait.
 /// It calculates the median by taking the average of the two values.
 /// 
@@ -100,6 +106,12 @@ pub struct MidpointMedian;
 impl<T: Div<Output = T> + Add<T, Output = T> + From<i32> + Copy + One> MergeMedian<T> for MidpointMedian {
     fn merge(&self, a: &T, b: &T) -> T {
         (*a + *b) / (T::one() + T::one())
+    }
+}
+
+impl Default for MidpointMedian {
+    fn default() -> Self {
+        MidpointMedian
     }
 }
 
@@ -400,6 +412,16 @@ impl<T, K> IntoIterator for MedianHeap<T, K> {
                 self.min_heap.into_iter().map(|x| x.0)
             ).collect::<Vec<_>>()
             .into_iter()
+    }
+}
+
+impl<T: Ord + Add<Output = T> + Copy, K: MergeMedian<T> + Default> FromIterator<T> for MedianHeap<T, K> {
+    fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
+        let mut heap = MedianHeap::new(K::default());
+        for value in iter {
+            heap.push(value);
+        }
+        heap
     }
 }
 
