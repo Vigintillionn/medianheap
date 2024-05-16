@@ -209,7 +209,7 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
     /// ```
     pub fn push(&mut self, value: T) {
         // If the heap is empty, push the value to the max heap.
-        if self.max_heap.len() == 0 && self.min_heap.len() == 0 {
+        if self.is_empty() {
             self.max_heap.push(value);
             return
         }
@@ -260,7 +260,7 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
     /// # Complexity
     /// O(1) 
     pub fn pop(&mut self) -> Option<T> {
-        if self.max_heap.len() == 0 && self.min_heap.len() == 0 {
+        if self.is_empty() {
             return None
         }
 
@@ -273,6 +273,40 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
             return Some(self.max_heap.pop().unwrap())
         } else {
             return Some(self.min_heap.pop().unwrap().0)
+        }
+    }
+
+    /// Returns true if the heap contains the specified value, false otherwise.
+    /// 
+    /// Example:
+    /// ```
+    /// use medianheap::{MedianHeap, LeftHandedMedian};
+    /// 
+    /// let mut heap = MedianHeap::new(LeftHandedMedian);
+    /// heap.push(1);
+    /// heap.push(2);
+    ///    
+    /// assert_eq!(true, heap.has(1));
+    /// assert_eq!(false, heap.has(3));
+    /// 
+    /// heap.push(3);
+    /// 
+    /// assert_eq!(true, heap.has(3));
+    /// ```
+    /// 
+    /// # Complexity
+    /// O(n)
+    pub fn has(&self, value: T) -> bool {
+        if self.is_empty() {
+            return false
+        }
+
+        if value < self.get_median().unwrap() {
+            // Search in the max heap.
+            self.max_heap.iter().any(|x| *x == value)
+        } else {
+            // Search in the min heap.
+            self.min_heap.iter().any(|x| x.0 == value)
         }
     }
 }
