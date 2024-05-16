@@ -2,7 +2,7 @@ use std::collections::BinaryHeap;
 use std::cmp::Reverse;
 use std::fmt::Debug;
 use std::ops::Add;
-use std::vec::IntoIter;
+// use std::vec::IntoIter;
 
 use crate::MergeMedian;
 
@@ -298,19 +298,20 @@ impl<T: Debug + Copy, K> Debug for MedianHeap<T, K> {
   }
 }
 
-impl<T, K> IntoIterator for MedianHeap<T, K> {
-  type Item = T;
-  type IntoIter = IntoIter<T>;
+// Pretty useless, since there's no order guarantee due to the heaps.
+// impl<T: Debug, K> IntoIterator for MedianHeap<T, K> {
+//   type Item = T;
+//   type IntoIter = IntoIter<T>;
 
-  fn into_iter(self) -> Self::IntoIter {
-      self.max_heap
-          .into_iter()
-          .chain(
-              self.min_heap.into_iter().map(|x| x.0)
-          ).collect::<Vec<_>>()
-          .into_iter()
-  }
-}
+//   fn into_iter(self) -> Self::IntoIter {
+//     self.max_heap
+//       .into_iter()
+//       .chain(
+//           self.min_heap.into_iter().map(|x| Reverse(x.0).0)
+//       ).collect::<Vec<_>>()
+//       .into_iter()
+//   }
+// }
 
 impl<T: Ord + Add<Output = T> + Copy, K: MergeMedian<T> + Default> FromIterator<T> for MedianHeap<T, K> {
   fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {

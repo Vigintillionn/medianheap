@@ -146,3 +146,30 @@ fn test_median_heap_has() {
   assert_eq!(false, heap.has(&8));
   assert_eq!(false, heap.has(&9));
 }
+
+#[test]
+fn test_median_heap_fromiter() {
+  let iter = vec![1, 2, 3, 4, 5, 6, 7, 7, 7].into_iter();
+  let heap: MedianHeap<i32, MidpointMedian> = MedianHeap::from_iter(iter);
+
+  assert_eq!(5, heap.get_median().unwrap());
+  assert_eq!(9, heap.len());
+}
+
+#[test]
+fn test_median_heap_clone() {
+  let mut heap = MedianHeap::new(MidpointMedian);
+  heap.push(1);
+  heap.push(2);
+  heap.push(3);
+  heap.push(4);
+  heap.push(5);
+  heap.push(6);
+  heap.push(7);
+  heap.push(7);
+  heap.push(7);
+
+  let cloned_heap = heap.clone();
+  assert_eq!(5, cloned_heap.get_median().unwrap());
+  assert_eq!(9, cloned_heap.len());
+}
