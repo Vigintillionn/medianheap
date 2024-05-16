@@ -70,6 +70,7 @@ pub trait MergeMedian<T> {
 /// let median = left_handed_median.merge(&a, &b);
 /// assert_eq!(median, 1);
 /// ```
+#[derive(Clone)]
 pub struct LeftHandedMedian;
 impl<T: Ord + Add + Copy> MergeMedian<T> for LeftHandedMedian {
     fn merge(&self, a: &T, b: &T) -> T {
@@ -94,6 +95,7 @@ impl<T: Ord + Add + Copy> MergeMedian<T> for LeftHandedMedian {
 /// let median = midpoint_median.merge(&a, &b);
 /// assert_eq!(median, 3);
 /// ```
+#[derive(Clone)]
 pub struct MidpointMedian;
 impl<T: Div<Output = T> + Add<T, Output = T> + From<i32> + Copy + One> MergeMedian<T> for MidpointMedian {
     fn merge(&self, a: &T, b: &T) -> T {
@@ -398,6 +400,16 @@ impl<T, K> IntoIterator for MedianHeap<T, K> {
                 self.min_heap.into_iter().map(|x| x.0)
             ).collect::<Vec<_>>()
             .into_iter()
+    }
+}
+
+impl<T: Ord + Clone, K: Clone> Clone for MedianHeap<T, K> {
+    fn clone(&self) -> Self {
+        MedianHeap {
+            median_kind: self.median_kind.clone(),
+            max_heap: self.max_heap.clone(),
+            min_heap: self.min_heap.clone(),
+        }
     }
 }
 
