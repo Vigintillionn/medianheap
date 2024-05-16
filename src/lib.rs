@@ -309,6 +309,14 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
             self.min_heap.iter().any(|x| x.0 == value)
         }
     }
+
+    pub fn peak_max(&self) -> Option<&T> {
+        self.max_heap.peek()
+    }
+
+    pub fn peak_min(&self) -> Option<&T> {
+        self.min_heap.peek().map(|x| &x.0)
+    }
 }
 
 impl<T, K> MedianHeap<T, K> {
