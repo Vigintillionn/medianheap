@@ -235,6 +235,46 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
             self.max_heap.push(value);
         }
     }
+
+    /// Removes and returns the median of the values in the heap.
+    /// If the heap is empty, the method returns None.
+    /// 
+    /// If two median candidates are found, the method pops both and merges them using the median kind to get the median.
+    /// 
+    /// Example:
+    /// ```
+    /// use medianheap::{MedianHeap, LeftHandedMedian};
+    /// 
+    /// let mut heap = MedianHeap::new(LeftHandedMedian);
+    /// heap.push(1);
+    /// heap.push(2);
+    /// heap.push(3);
+    /// 
+    /// assert_eq!(2, heap.pop().unwrap());
+    /// assert_eq!(2, heap.len())
+    /// 
+    /// assert_eq!(1, heap.pop().unwrap());
+    /// assert_eq!(0, heap.len())
+    /// ```
+    /// 
+    /// # Complexity
+    /// O(1) 
+    pub fn pop(&mut self) -> Option<T> {
+        if self.max_heap.len() == 0 && self.min_heap.len() == 0 {
+            return None
+        }
+
+        if self.max_heap.len() == self.min_heap.len() {
+            let left = self.max_heap.pop().unwrap();
+            let right = self.min_heap.pop().unwrap().0;
+            let median = self.median_kind.merge(&left, &right);
+            return Some(median)
+        } else if self.max_heap.len() > self.min_heap.len() {
+            return Some(self.max_heap.pop().unwrap())
+        } else {
+            return Some(self.min_heap.pop().unwrap().0)
+        }
+    }
 }
 
 impl<T, K> MedianHeap<T, K> {
@@ -297,10 +337,10 @@ impl<T, K> MedianHeap<T, K> {
     }
 }
 
-impl<T: Debug, K> Debug for MedianHeap<T, K> {
+impl<T: Debug + Copy, K> Debug for MedianHeap<T, K> {
     /// Formats the heap for debugging purposes.
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "max_heap: {:?}, min_heap: {:?}", self.max_heap, self.min_heap)
+        write!(f, "max_heap: {:?}, min_heap: {:?}", self.max_heap, self.min_heap.iter().map(|x| x.0).collect::<Vec<_>>())
     }
 }
 
