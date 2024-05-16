@@ -2,6 +2,7 @@ use std::collections::BinaryHeap;
 use std::cmp::Reverse;
 use std::fmt::Debug;
 use std::ops::{Add, Div};
+use std::vec::IntoIter;
 use num::traits::One;
 
 /// MergeMedian is a trait that defines a method to merge two values of the same type into a single value.
@@ -383,6 +384,20 @@ impl<T: Debug + Copy, K> Debug for MedianHeap<T, K> {
     /// Formats the heap for debugging purposes.
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "max_heap: {:?}, min_heap: {:?}", self.max_heap, self.min_heap.iter().map(|x| x.0).collect::<Vec<_>>())
+    }
+}
+
+impl<T, K> IntoIterator for MedianHeap<T, K> {
+    type Item = T;
+    type IntoIter = IntoIter<T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.max_heap
+            .into_iter()
+            .chain(
+                self.min_heap.into_iter().map(|x| x.0)
+            ).collect::<Vec<_>>()
+            .into_iter()
     }
 }
 
