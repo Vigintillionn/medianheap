@@ -1,7 +1,14 @@
 [package]
-name = "medianheap"
+name = "median-heap"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+license-file = "LICENSE"
+description = "A median heap implementation in Rust, used to keep track of a running median of a sequence of numbers."
+repository = "https://github.com/Vigintillionn/medianheap.git"
+readme = "README.md"
+keywords = ["median", "heap", "data-structure", "algorithm", "running-median"]
+categories = ["data-structures", "algorithms", "mathematics", "computing", "statistics"]
 
 [dependencies]
 num = "0.4.3"
