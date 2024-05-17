@@ -4,7 +4,12 @@ MedianHeap is a Rust crate that provides a data structure for calculating the me
 
 # Installation
 
-Idk, I might publish this but for now just clone the repo :shrug:.
+Add the following line to your `Cargo.toml` file:
+
+```toml
+[dependencies]
+median_heap: "0.1.0"
+```
 
 # Usage
 
@@ -34,17 +39,6 @@ fn main() {
   assert_eq!(3, heap.get_median().unwrap()); // Two median candidates are 2 and 3. MyMedian.merge(2, 3) returns 3.
 }
 ```
-
-# Examples
-
-If I don't feel lazy I might add some examples. It's a really simple library though. I have faith in you that you'll get it to work <3.
-
-# TODO
-
-Here are some things I - might - still implement.
-- Search/Get from the heap
-- Pop/Delete from the heap
-- Add some more utility
 
 # License
 
