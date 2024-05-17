@@ -7,7 +7,7 @@ use num::traits::One;
 /// Example:
 /// 
 /// ```
-/// use medianheap::MergeMedian;
+/// use median_heap::MergeMedian;
 /// 
 /// struct MyMedian;
 /// impl MergeMedian<i32> for MyMedian {
@@ -28,7 +28,7 @@ use num::traits::One;
 /// This allows the MedianHeap struct to use the MyMedian struct to calculate the median of the values in the heap when 2 median candidates are found.
 /// 
 /// ```
-/// use medianheap::{MergeMedian, MedianHeap};
+/// use median_heap::{MergeMedian, MedianHeap};
 /// 
 /// struct MyMedian;
 /// impl MergeMedian<i32> for MyMedian {
@@ -58,7 +58,7 @@ pub trait MergeMedian<T> {
 /// 
 /// Example:
 /// ```
-/// use medianheap::{LeftHandedMedian, MergeMedian};
+/// use median_heap::{LeftHandedMedian, MergeMedian};
 /// 
 /// let left_handed_median = LeftHandedMedian;
 /// let a = 1;
@@ -89,7 +89,7 @@ impl Default for LeftHandedMedian {
 /// 
 /// Example:
 /// ```
-/// use medianheap::{MidpointMedian, MergeMedian};
+/// use median_heap::{MidpointMedian, MergeMedian};
 /// 
 /// let midpoint_median = MidpointMedian;
 /// let a = 2;

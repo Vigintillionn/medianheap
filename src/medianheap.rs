@@ -16,7 +16,7 @@ use crate::MergeMedian;
 /// 
 /// Example:
 /// ```
-/// use medianheap::{MidpointMedian, MedianHeap};
+/// use median_heap::{MidpointMedian, MedianHeap};
 /// 
 /// let mut heap = MedianHeap::new(MidpointMedian);
 /// heap.push(2);
@@ -48,7 +48,7 @@ impl<T: Ord, K: MergeMedian<T>> MedianHeap<T, K> {
   /// 
   /// Example:
   /// ```
-  /// use medianheap::{MidpointMedian, MedianHeap};
+  /// use median_heap::{MidpointMedian, MedianHeap};
   /// 
   /// let mut heap = MedianHeap::new(MidpointMedian);
   /// heap.push(1);
@@ -73,7 +73,7 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
   /// 
   /// Example:
   /// ```
-  /// use medianheap::{MedianHeap, LeftHandedMedian};
+  /// use median_heap::{MedianHeap, LeftHandedMedian};
   /// 
   /// let mut heap = MedianHeap::new(LeftHandedMedian);
   /// heap.push(1);
@@ -112,7 +112,7 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
   /// 
   /// Example:
   /// ```
-  /// use medianheap::{MedianHeap, LeftHandedMedian};
+  /// use median_heap::{MedianHeap, LeftHandedMedian};
   /// 
   /// let mut heap = MedianHeap::new(LeftHandedMedian);
   /// heap.push(2);
@@ -159,7 +159,7 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
   /// 
   /// Example:
   /// ```
-  /// use medianheap::{MedianHeap, LeftHandedMedian};
+  /// use median_heap::{MedianHeap, LeftHandedMedian};
   /// 
   /// let mut heap = MedianHeap::new(LeftHandedMedian);
   /// heap.push(1);
@@ -196,7 +196,7 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
   /// 
   /// Example:
   /// ```
-  /// use medianheap::{MedianHeap, LeftHandedMedian};
+  /// use median_heap::{MedianHeap, LeftHandedMedian};
   /// 
   /// let mut heap = MedianHeap::new(LeftHandedMedian);
   /// heap.push(1);
@@ -204,13 +204,18 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
   /// heap.push(3);
   /// 
   /// assert_eq!(3, heap.len());
-  /// assert_eq!(true, heap.has(2));
+  /// assert_eq!(true, heap.has(&2));
   /// assert_eq!(2, heap.get_median().unwrap());
   /// 
   /// heap.delete(&2);
   /// 
   /// assert_eq!(2, heap.len());
-  /// assert_eq!(false, heap.has(2));
+  /// assert_eq!(false, heap.has(&2));
+  /// assert_eq!(1, heap.get_median().unwrap());
+  /// 
+  /// heap.delete(&3);
+  /// assert_eq!(1, heap.len());
+  /// assert_eq!(false, heap.has(&3));
   /// assert_eq!(1, heap.get_median().unwrap());
   /// ```
   /// 
@@ -223,6 +228,11 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
 
     let median = self.get_median().unwrap();
 
+    if value == &median {
+      self.pop();
+      return;
+    }
+
     if *value < median {
       self.max_heap.retain(|x| x != value);
     } else {
@@ -234,19 +244,19 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
   /// 
   /// Example:
   /// ```
-  /// use medianheap::{MedianHeap, LeftHandedMedian};
+  /// use median_heap::{MedianHeap, LeftHandedMedian};
   /// 
   /// let mut heap = MedianHeap::new(LeftHandedMedian);
   /// heap.push(1);
   /// heap.push(2);
   /// 
-  /// assert_eq!(true, heap.has(1));
-  /// assert_eq!(true, heap.has(2));
-  /// assert_eq!(false, heap.has(3));
+  /// assert_eq!(true, heap.has(&1));
+  /// assert_eq!(true, heap.has(&2));
+  /// assert_eq!(false, heap.has(&3));
   /// 
   /// heap.push(3);
   /// 
-  /// assert_eq!(true, heap.has(3));
+  /// assert_eq!(true, heap.has(&3));
   /// ```
   /// 
   /// # Complexity
@@ -284,7 +294,7 @@ impl<T, K> MedianHeap<T, K> {
   /// 
   /// Example:
   /// ```
-  /// use medianheap::{MedianHeap, LeftHandedMedian};
+  /// use median_heap::{MedianHeap, LeftHandedMedian};
   /// 
   /// let mut heap = MedianHeap::new(LeftHandedMedian);
   /// heap.push(1);
@@ -303,7 +313,7 @@ impl<T, K> MedianHeap<T, K> {
   /// 
   /// Example:
   /// ```
-  /// use medianheap::{MedianHeap, LeftHandedMedian};
+  /// use median_heap::{MedianHeap, LeftHandedMedian};
   /// 
   /// let mut heap = MedianHeap::new(LeftHandedMedian);
   /// 
@@ -321,7 +331,7 @@ impl<T, K> MedianHeap<T, K> {
   /// 
   /// Example:
   /// ```
-  /// use medianheap::{MedianHeap, LeftHandedMedian};
+  /// use median_heap::{MedianHeap, LeftHandedMedian};
   /// 
   /// let mut heap = MedianHeap::new(LeftHandedMedian);
   /// heap.push(1);
