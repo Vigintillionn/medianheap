@@ -174,7 +174,7 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
   /// ```
   /// 
   /// # Complexity
-  /// O(1) 
+  /// O(logn) 
   pub fn pop(&mut self) -> Option<T> {
     if self.is_empty() {
       return None
@@ -192,6 +192,30 @@ impl<T: Ord + Add + Copy, K: MergeMedian<T>> MedianHeap<T, K> {
     }
   }
 
+  /// Removes the specified value from the heap.
+  /// 
+  /// Example:
+  /// ```
+  /// use medianheap::{MedianHeap, LeftHandedMedian};
+  /// 
+  /// let mut heap = MedianHeap::new(LeftHandedMedian);
+  /// heap.push(1);
+  /// heap.push(2);
+  /// heap.push(3);
+  /// 
+  /// assert_eq!(3, heap.len());
+  /// assert_eq!(true, heap.has(2));
+  /// assert_eq!(2, heap.get_median().unwrap());
+  /// 
+  /// heap.delete(&2);
+  /// 
+  /// assert_eq!(2, heap.len());
+  /// assert_eq!(false, heap.has(2));
+  /// assert_eq!(1, heap.get_median().unwrap());
+  /// ```
+  /// 
+  /// # Complexity
+  /// O(n)
   pub fn delete(&mut self, value: &T) {
     if self.is_empty() {
       return;
