@@ -99,7 +99,7 @@ impl Default for LeftHandedMedian {
 /// ```
 #[derive(Clone)]
 pub struct MidpointMedian;
-impl<T: Div<Output = T> + Add<T, Output = T> + From<i32> + Copy + One> MergeMedian<T> for MidpointMedian {
+impl<T: Div<Output = T> + Add<T, Output = T> + Copy + One> MergeMedian<T> for MidpointMedian {
   fn merge(&self, a: &T, b: &T) -> T {
       (*a + *b) / (T::one() + T::one())
   }
