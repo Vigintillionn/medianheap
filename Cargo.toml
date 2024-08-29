@@ -7,7 +7,7 @@ description = "A median heap implementation in Rust, used to keep track of a run
 repository = "https://github.com/Vigintillionn/medianheap.git"
 readme = "README.md"
 keywords = ["median", "heap", "data-structure", "algorithm", "running-median"]
-categories = ["data-structures", "algorithms", "mathematics", "computing", "statistics"]
+categories = ["data-structures", "algorithms", "mathematics"]
 
 [dependencies]
 num = "0.4.3"
