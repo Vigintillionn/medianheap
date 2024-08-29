@@ -8,7 +8,7 @@ Add the following line to your `Cargo.toml` file:
 
 ```toml
 [dependencies]
-median_heap: "0.1.0"
+median_heap = "0.1.0"
 ```
 
 # Usage
